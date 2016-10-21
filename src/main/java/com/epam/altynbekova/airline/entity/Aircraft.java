@@ -1,34 +1,36 @@
 package com.epam.altynbekova.airline.entity;
 
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.UUID;
 
 public class Aircraft implements Comparable<Aircraft> {
-    private int id;
+    private UUID uuid;
     private String modelName;
     private double rangeInKm;
-    /** Fuel consumption in kilogram per hour (kg/hr)*/
+    /**
+     * Fuel consumption in kilogram per hour (kg/hr)
+     */
     private double consumption;
 
-    public Aircraft(){}
+    public Aircraft() {
+    }
 
-    public Aircraft(int id, String modelName, double range, double consumption) {
-        this.id = id;
+    public Aircraft(UUID uuid, String modelName, double range, double consumption) {
+        this.uuid = uuid;
         this.modelName = modelName;
         this.rangeInKm = range;
         this.consumption = consumption;
     }
 
-    public String info()
-    {
-        return String.format("Model: %s, id:%d", getModelName(), getId());
+    public String info() {
+        return String.format("Model: %s, id:%s", getModelName(), getUuid().toString());
     }
+
     public double getConsumption() {
         return consumption;
     }
 
-    public int getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getModelName() {
@@ -39,8 +41,24 @@ public class Aircraft implements Comparable<Aircraft> {
         return rangeInKm;
     }
 
-   public int compareTo(Aircraft a) {
-        int modelCmp=this.modelName.compareToIgnoreCase(a.getModelName());
-        return (modelCmp != 0) ? modelCmp : Integer.compare(this.id, a.getId());
+    public int compareTo(Aircraft a) {
+        int modelCmp = getModelName().compareToIgnoreCase(a.getModelName());
+        return (modelCmp != 0) ? modelCmp : getUuid().compareTo(a.getUuid());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Aircraft aircraft = (Aircraft) o;
+
+        return getUuid().equals(aircraft.getUuid());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getUuid().hashCode();
     }
 }
